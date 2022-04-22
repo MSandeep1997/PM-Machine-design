@@ -1,0 +1,122 @@
+* 27;Dynamic_circuit.ckt
+* Project: F:/Term_paper/Term_paper.aedt
+* Design: Dynamic_circuit
+
+*BeginParamDef
+.PARAM $OSD=0.125
+.PARAM $D=0.065
+.PARAM $hs0=0.001
+.PARAM $hs1=0.0005
+.PARAM $hs2=0.02
+.PARAM $Ns=15
+.PARAM $Nm=14
+.PARAM $wst1=0.007
+.PARAM $g_wst=1
+.PARAM $bs0=0.002
+.PARAM $ssfr=0.002
+.PARAM $Dsh=0.034
+.PARAM $g=0.0008
+.PARAM $dm=0.0035
+.PARAM $g_m=0.94
+.PARAM $Lstk=0.033
+.PARAM $Ntc=152
+.PARAM $Vdc=500
+.PARAM $Rph=0.1
+.PARAM $Thetar0=0
+*EndParamDef
+
+.EXPRESSION $alpha_s='6.28318530717959/$Ns'
+.EXPRESSION $alpha_p='6.28318530717959/$Nm'
+.EXPRESSION $wst2='$g_wst*$wst1'
+.EXPRESSION $gamma_s='2*asin($wst2/2)/($D/2 + $hs0 + $hs1 + $hs2)'
+.EXPRESSION $bs1='2*(tan($alpha_s/2)*($D/2 + $hs0 + $hs1) - $wst1/(2*cos($alpha_s/2)))'
+.EXPRESSION $alpha_m='$g_m*$alpha_p'
+
+*begin toplevel circuit
+D65 net_16 net_1 DiodeModel 
+VI_a net_2 net_6 DC 0 
+.PRINT TRAN PROBE VI_a(t) I(VI_a)
+D32 net_4 net_6 DiodeModel 
+.MODEL SW_Model SW (Ron=0.001 Roff=1000000 Von=0 Voff=0)
+D63 net_6 net_8 DiodeModel 
+D36 net_3 net_5 DiodeModel 
+D66 net_1 net_9 DiodeModel 
+D70 net_13 net_6 DiodeModel 
+D71 net_16 net_12 DiodeModel 
+.MODEL DiodeModel D (IS=1e-14 RS=0 N=1 EG=1.11 XTI=3 BV=1e+30 IBV=0.001 TNOM=27)
+S_68 net_9 net_16 Ivca4 POS SW_Model OFF
+D72 net_12 net_14 DiodeModel 
+V29 0 net_16 '$Vdc/2'
+S_50 net_5 net_16 Ivca2 POS SW_Model OFF
+S_67 net_8 net_1 Ivca3 POS SW_Model OFF
+D69 net_6 net_13 DiodeModel 
+V28 net_2 0 '$Vdc/2'
+D64 net_8 net_6 DiodeModel 
+S_46 net_4 net_3 Ivca1 POS SW_Model OFF
+D31 net_6 net_4 DiodeModel 
+D34 net_16 net_3 DiodeModel 
+LCOIL_11 net_22 net_23 1 Winding
+LCOIL_6 net_26 net_17 1 Winding
+LCOIL_7 net_18 net_17 1 Winding
+LCOIL_12 net_24 net_23 1 Winding
+S_74 net_14 net_16 Ivca6 POS SW_Model OFF
+LCOIL_4 net_19 net_20 1 Winding
+LCOIL_3 net_7 net_10 1 Winding
+LCOIL_15 0 net_15 1 Winding
+LCOIL_13 net_24 0 1 Winding
+LCOIL_9 net_27 net_21 1 Winding
+LCOIL_14 net_10 net_11 1 Winding
+Vi_b net_1 net_30 DC 0 
+.PRINT TRAN PROBE Vi_b(t) I(Vi_b)
+LCOIL_2 net_15 net_11 1 Winding
+Vi_a net_3 net_28 DC 0 
+.PRINT TRAN PROBE Vi_a(t) I(Vi_a)
+Vi_c net_12 net_29 DC 0 
+.PRINT TRAN PROBE Vi_c(t) I(Vi_c)
+R110 net_28 net_25 '$Rph'
+R111 net_30 net_26 '$Rph'
+LCOIL_10 net_22 net_21 1 Winding
+R112 net_29 net_27 '$Rph'
+Iv_a net_28 0 DC 0 
+.PRINT TRAN PROBE Iv_a(t) V(Iv_a)
+Iv_b net_30 0 DC 0 
+.PRINT TRAN PROBE Iv_b(t) V(Iv_b)
+Ie_a net_25 0 DC 0 
+.PRINT TRAN PROBE Ie_a(t) V(Ie_a)
+LCOIL_5 net_19 net_18 1 Winding
+LCOIL_1 net_25 net_7 1 Winding
+S_73 net_13 net_12 Ivca5 POS SW_Model OFF
+LCOIL_8 net_20 0 1 Winding
+R123 0 net_31 100
+V129 net_32 0 PULSE (-1 1 '720/$Nm/2' 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+Ivca6 net_36 0 DC 0 
+.PRINT TRAN PROBE Ivca6(t) V(Ivca6)
+V120 net_31 0 PULSE (-1 1 0 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+R133 0 net_33 100
+V138 net_35 0 PULSE (-1 1 '2*(720/$Nm)/3' 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+Ivca1 net_31 0 DC 0 
+.PRINT TRAN PROBE Ivca1(t) V(Ivca1)
+R139 0 net_35 100
+Ivca3 net_33 0 DC 0 
+.PRINT TRAN PROBE Ivca3(t) V(Ivca3)
+Ie_c net_27 0 DC 0 
+.PRINT TRAN PROBE Ie_c(t) V(Ie_c)
+Ivca5 net_35 0 DC 0 
+.PRINT TRAN PROBE Ivca5(t) V(Ivca5)
+V132 net_33 0 PULSE (-1 1 '720/$Nm/3' 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+Ie_b net_26 0 DC 0 
+.PRINT TRAN PROBE Ie_b(t) V(Ie_b)
+V141 net_36 0 PULSE (-1 1 '720/$Nm/6' 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+V135 net_34 0 PULSE (-1 1 '5/6*(720/$Nm)' 0 0 '720/(3*$Nm)' '720/$Nm') TYPE=POS
+R142 0 net_36 100
+R136 0 net_34 100
+R130 0 net_32 100
+Ivca4 net_34 0 DC 0 
+.PRINT TRAN PROBE Ivca4(t) V(Ivca4)
+Ivca2 net_32 0 DC 0 
+.PRINT TRAN PROBE Ivca2(t) V(Ivca2)
+Iv_c net_29 0 DC 0 
+.PRINT TRAN PROBE Iv_c(t) V(Iv_c)
+
+*end toplevel circuit
+.end

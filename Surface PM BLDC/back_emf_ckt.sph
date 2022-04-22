@@ -1,0 +1,59 @@
+* 2;Back_EMF_Ckt.ckt
+* Project: D:/Term_paper/Term_paper.aedt
+* Design: Back_EMF_Ckt
+
+*BeginParamDef
+.PARAM $OSD=0.125
+.PARAM $D=0.065
+.PARAM $hs0=0.001
+.PARAM $hs1=0.0005
+.PARAM $hs2=0.02
+.PARAM $Ns=15
+.PARAM $Nm=14
+.PARAM $wst1=0.007
+.PARAM $g_wst=1
+.PARAM $bs0=0.002
+.PARAM $ssfr=0.002
+.PARAM $Dsh=0.034
+.PARAM $g=0.0008
+.PARAM $dm=0.0035
+.PARAM $g_m=0.94
+.PARAM $Lstk=0.033
+.PARAM $Ntc=152
+*EndParamDef
+
+.EXPRESSION $alpha_s='6.28318530717959/$Ns'
+.EXPRESSION $alpha_p='6.28318530717959/$Nm'
+.EXPRESSION $wst2='$g_wst*$wst1'
+.EXPRESSION $gamma_s='2*asin($wst2/2)/($D/2 + $hs0 + $hs1 + $hs2)'
+.EXPRESSION $bs1='2*(tan($alpha_s/2)*($D/2 + $hs0 + $hs1) - $wst1/(2*cos($alpha_s/2)))'
+.EXPRESSION $alpha_m='$g_m*$alpha_p'
+
+*begin toplevel circuit
+I21 0 net_15 0
+Ie_a net_13 0 DC 0 
+.PRINT TRAN PROBE Ie_a(t) V(Ie_a)
+I17 0 net_13 0
+Ie_b net_14 0 DC 0 
+.PRINT TRAN PROBE Ie_b(t) V(Ie_b)
+I20 0 net_14 0
+Ie_c net_15 0 DC 0 
+.PRINT TRAN PROBE Ie_c(t) V(Ie_c)
+LCOIL_8 net_8 0 1 Winding
+LCOIL_7 net_6 net_5 1 Winding
+LCOIL_6 net_14 net_5 1 Winding
+LCOIL_1 net_13 net_1 1 Winding
+LCOIL_4 net_7 net_8 1 Winding
+LCOIL_3 net_1 net_2 1 Winding
+LCOIL_2 net_4 net_3 1 Winding
+LCOIL_5 net_7 net_6 1 Winding
+LCOIL_15 0 net_4 1 Winding
+LCOIL_11 net_10 net_11 1 Winding
+LCOIL_13 net_12 0 1 Winding
+LCOIL_14 net_2 net_3 1 Winding
+LCOIL_9 net_15 net_9 1 Winding
+LCOIL_10 net_10 net_9 1 Winding
+LCOIL_12 net_12 net_11 1 Winding
+
+*end toplevel circuit
+.end
